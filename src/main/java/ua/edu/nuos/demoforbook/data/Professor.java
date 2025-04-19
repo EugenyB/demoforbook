@@ -2,6 +2,7 @@ package ua.edu.nuos.demoforbook.data;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.LinkedHashSet;
@@ -11,9 +12,11 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "professor")
+@NoArgsConstructor
 public class Professor {
     @Id
     @Column(name = "professor_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "first_name", nullable = false, length = 20)
@@ -38,4 +41,15 @@ public class Professor {
     @OneToOne(mappedBy = "head", orphanRemoval = true)
     private Department departmentHeaded;
 
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+    public Professor(String firstName, String lastName, String degree, Position position, Department department) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.degree = degree;
+        this.position = position;
+        this.department = department;
+    }
 }

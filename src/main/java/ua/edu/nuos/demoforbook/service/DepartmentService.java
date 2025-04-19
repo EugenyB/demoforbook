@@ -7,6 +7,7 @@ import ua.edu.nuos.demoforbook.repository.DepartmentRepository;
 import ua.edu.nuos.demoforbook.repository.ProfessorRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -25,5 +26,13 @@ public class DepartmentService {
                 departmentRepository.save(department);
             });
         });
+    }
+
+    public void addDepartment(String name) {
+        departmentRepository.save(new Department(name));
+    }
+
+    public Optional<Department> findById(Integer id) {
+        return departmentRepository.findById(id);
     }
 }

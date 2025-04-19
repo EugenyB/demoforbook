@@ -11,10 +11,138 @@
 <header th:insert="fragments/general.html :: header"> </header>
 <div class="container text-center">
     <div class="row align-items-start">
-        <h2>Professors</h2>
+        <h2 th:if="${department!=null}"><span th:text="${department.name}"></span> Department </h2>
+        <h2 th:if="${department==null}">All Professors</h2>
     </div>
 </div>
+<div class="d-grid">
+    <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_professor" data-bs-ident="#add" th:attr="data-bs-link=@{/professors/add}">
+        <i class="bi bi-plus"></i> Add Professor</a>
+</div>
+<table class="table table-striped table-sm table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Full Name</th>
+            <th>Degree</th>
+            <th>Position</th>
+            <th th:if="${department==null}">Department</th>
+            <th><i class="bi bi-pencil"></i></th>
+            <th><i class="bi bi-trash"></i></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="p : ${professors}">
+            <td th:text="${p.id}"></td>
+            <td th:text="${p.firstName} + ' ' + ${p.lastName}" style="text-align: left;"></td>
+            <td th:text="${p.degree}"></td>
+            <td th:text="${p.position.title}"></td>
+            <td th:if="${department==null}" th:text="${p.department.name}"></td>
+            <td>
+                <a class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#add_professor" data-bs-ident="#edit"
+                   th:attr="data-bs-link=@{/professors/edit},
+                                data-bs-id=${p.id},
+                                data-bs-first-name=${p.firstName},
+                                data-bs-last-name=${p.lastName},
+                                data-bs-degree=${p.degree},
+                                data-bs-pos-id=${p.position.id},
+                                data-bs-dept-id=${p.department.id}"
 
+                ><i class="bi bi-pencil"></i></a>
+            </td>
+            <td>
+                <a class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#myconfirm"
+                   th:attr="data-bs-link=@{/professors/delete(id=${p.id},did=${p.department.id},dept=${department?.id})}, data-bs-text = ${p.firstName} + ' ' + ${p.lastName}, data-bs-id = ${p.id}"
+                ><i class="bi bi-trash"></i></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- add professor dialog -->
+<div class="modal fade" id="add_professor" tabindex="-1" aria-labelledby="staticChooseLabel" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+    <form id="add_professor_form" method="post" action="/professors/add">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h1 class="modal-title text-danger fs-4" id="staticEditLabel">Add Professor</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="text-align: left;">
+                    <input type="hidden" id="prof_id" name="prof_id">
+                    <table>
+                        <tr>
+                            <td><label for="prof_first_name">First Name:</label></td>
+                            <td><input type="text" id="prof_first_name" name="prof_first_name" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="prof_last_name">Last Name:</label></td>
+                            <td><input type="text" id="prof_last_name" name="prof_last_name" required></td>
+                        </tr>
+                        <tr>
+                            <td><label for="prof_degree">Degree:</label></td>
+                            <td><input type="text" id="prof_degree" name="prof_degree" required></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="prof_positions">Position:</label>
+                            </td>
+                            <td>
+                                <select class="form-control pos-list" id="prof_positions" name="position_id" required>
+                                    <option value="" selected >Choose Position:</option>
+                                    <option th:each="p : ${positions}" th:value="${p.id}" th:text="${p.title}"></option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="prof_departments">Department:</label>
+                            </td>
+                            <td>
+                                <select class="form-control dept-list" id="prof_departments" name="dept_id" required>
+                                    <option value="" selected >Choose Department:</option>
+                                    <option th:each="d : ${departments}" th:value="${d.id}" th:text="${d.name}"></option>
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <input type="submit" class="btn btn-success change-button" value="Add"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- end add professor -->
+
+<!-- confirm dialog -->
+<div class="modal fade" id="myconfirm" tabindex="-1" aria-labelledby="staticWarningLabel" aria-hidden="true"
+     data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title text-danger fs-4" id="staticWarningLabel">Warning</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete <span id="modal-text" class="modal-text text-danger"></span>?<br/>
+                If you click Delete, this <i>cannot be undone</i>!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <a th:method="delete" class="btn btn-danger delete-button">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end confirm -->
+
+<script src="/js/professors.js"></script>
+<script src="/js/confirm.js"></script>
 <script th:src="@{/webjars/bootstrap/5.3.5/dist/js/bootstrap.min.js}"></script>
 </body>
 </html>

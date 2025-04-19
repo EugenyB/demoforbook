@@ -13,10 +13,10 @@ setHeadForDeptDialog.addEventListener('show.bs.modal', function (event) {
     // let modalText = setHeadForDeptDialog.querySelector('.modal-text');
     // modalText.textContent  = name + ' (' + did + ')';
 
-    for (let i = 0; i < list.options.length; i++) {
-
-        list.options[i].selected = (list.options[i].value === hid);
-    }
+    // if we want to select the option with the given value
+    // for (let i = 0; i < list.options.length; i++) {
+    //     list.options[i].selected = (list.options[i].value === hid);
+    // }
     document.getElementById("did").setAttribute('value', did);
     // let confirmButton = setHeadForDeptDialog.querySelector('.confirm-button');
     // confirmButton.setAttribute('href', link)
