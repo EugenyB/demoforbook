@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Departments</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.5/dist/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/1.11.3/font/bootstrap-icons.css}">
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body>
+<header th:insert="fragments/general.html :: header"> </header>
+<div class="container text-center">
+    <div class="row align-items-start">
+        <div class="col">
+        <h2>Departments</h2>
+        <div class="d-grid">
+            <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_dept" data-bs-ident="#add" th:attr="data-bs-link=@{/department/add}">
+                <i class="bi bi-plus"></i> Add Department</a>
+        </div>
+        <table class="table table-striped table-sm table-hover">
+            <thead class="table-primary">
+            <tr>
+                <th>#</th>
+                <th>Department</th>
+                <th>Head</th>
+                <th><i class="bi bi-pencil"></i></th>
+                <th><i class="bi bi-trash"></i></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="dept : ${departments}">
+                <td th:text="${dept.id}"></td>
+                <td th:text="${dept.name}" style="text-align: left;"></td>
+                <td>
+                    <span th:text="${dept.head!=null} ? ${dept.head.firstName} + ' ' + ${dept.head.lastName}"></span>
+                    <span th:if="${dept.head!=null}">
+<!--                        <a class="btn btn-sm btn-warning" th:href="@{/dept/edit_head(id=${dept.id})}">EDIT</a>-->
+                        <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#add_set_head" data-bs-ident="#edit"
+                           th:attr="data-bs-link=@{/departments/edit_set_head(id=${dept.id})},
+                                        data-bs-did=${dept.id},
+                                        data-bs-hid=${dept.head.id},
+                                        data-bs-name=${dept.name}" >
+                        <i class="bi bi-pencil"></i></a>
+                    </span>
+                    <span th:if="${dept.head==null}">
+<!--                        <a class="btn btn-sm btn-info" th:href="@{/dept/add_head(id=${dept.id})}">SET</a>-->
+                        <a class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#add_set_head" data-bs-ident="#edit"
+                           th:attr="data-bs-link=@{/departments/add_head(id=${dept.id})},
+                                        data-bs-did=${dept.id},
+                                        data-bs-name=${dept.name}" >
+                        <i class="bi bi-pencil"></i></a>
+                    </span>
+                </td>
+                <td>
+                    <a class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#add_dept" data-bs-ident="#edit"
+                       th:attr="data-bs-link=@{/departmets/edit_dept},
+                                        data-bs-id=${dept.id},
+                                        data-bs-name=${dept.name}" >
+                        <i class="bi bi-pencil"></i></a></td>
+                <td>
+                    <a class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#myconfirm"
+                       th:attr="data-bs-link=@{/departments/delete(id=${dept.id})}, data-bs-text = ${dept.name}, data-bs-id = ${dept.id}">
+                        <i class="bi bi-trash"></i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    <!-- confirm dialog -->
+    <div class="modal fade" id="myconfirm" tabindex="-1" aria-labelledby="staticWarningLabel" aria-hidden="true"
+         data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title text-danger fs-4" id="staticWarningLabel">Warning</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="text-align: left;" >
+                    Are you sure you want to delete <span id="modal-text" class="modal-text text-danger"></span>?<br/>
+                    If you click Delete, this <i>cannot be undone</i>!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a th:method="delete" class="btn btn-danger delete-button">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end confirm -->
+
+    <!-- choose dialog -->
+    <div class="modal fade" id="add_set_head" tabindex="-1" aria-labelledby="staticChooseLabel" aria-hidden="true"
+         data-bs-backdrop="static" data-bs-keyboard="false">
+        <form id="add_set_head_form" method="post" action="/departments/set_head">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h1 class="modal-title text-danger fs-4" id="staticChooseLabel">Choose from list</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="dropDownList">Choose Head from list:</label>
+                    <input type="hidden" id="did" name="did">
+                    <select class="form-control" id="dropDownList" name="hid" required>
+                        <option value="" selected >Choose Head</option>
+                        <option th:each="p : ${professors}" th:value="${p.id}" th:text="${p.firstName} + ' ' + ${p.lastName}"></option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <input type="submit" class="btn btn-success change-button" value="Change"/>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+    <!-- end choose -->
+</div>
+<script src="/js/confirm.js"></script>
+<script src="/js/dept_head.js"></script>
+<script th:src="@{/webjars/bootstrap/5.3.5/dist/js/bootstrap.min.js}"></script>
+</body>
+</html>
