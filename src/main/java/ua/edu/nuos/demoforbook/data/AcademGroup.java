@@ -2,6 +2,7 @@ package ua.edu.nuos.demoforbook.data;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.LinkedHashSet;
@@ -10,6 +11,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "academ_group")
 public class AcademGroup {
     @Id
@@ -35,4 +37,10 @@ public class AcademGroup {
     @OneToMany(mappedBy = "group")
     private Set<Student> students = new LinkedHashSet<>();
 
+    public AcademGroup(String name, Major major, Professor professor, Department department) {
+        this.name = name;
+        this.major = major;
+        this.curator = professor;
+        this.department = department;
+    }
 }

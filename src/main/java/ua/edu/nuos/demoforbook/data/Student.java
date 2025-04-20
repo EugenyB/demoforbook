@@ -2,6 +2,7 @@ package ua.edu.nuos.demoforbook.data;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -9,10 +10,12 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "student")
 public class Student {
     @Id
     @Column(name = "student_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "first_name", nullable = false, length = 30)
@@ -35,4 +38,12 @@ public class Student {
     @JoinColumn(name = "city_id")
     private City city;
 
+    public Student(String firstName, String lastName, LocalDate date, City city, String address, AcademGroup group) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthday = date;
+        this.city = city;
+        this.streetAddress = address;
+        this.group = group;
+    }
 }
