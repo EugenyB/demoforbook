@@ -19,7 +19,7 @@ public class City {
     @Column(name = "city_id", nullable = false)
     private Integer id;
 
-    @Column(name = "name", nullable = false, length = 30)
+    @Column(name = "name", nullable = false, length = 125)
     private String name;
 
     @OneToMany(mappedBy = "city", orphanRemoval = true)

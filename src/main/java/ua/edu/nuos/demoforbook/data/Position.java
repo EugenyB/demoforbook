@@ -19,7 +19,7 @@ public class Position {
     @Column(name = "position_id", nullable = false)
     private Integer id;
 
-    @Column(name = "title", nullable = false, length = 120)
+    @Column(name = "title", nullable = false, length = 125)
     private String title;
 
     @OneToMany(mappedBy = "position")

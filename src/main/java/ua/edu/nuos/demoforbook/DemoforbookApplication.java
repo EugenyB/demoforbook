@@ -11,3 +11,7 @@ public class DemoforbookApplication {
     }
 
 }
+
+// 1209 строк Java
+//  340 строк JS
+// 1025 строк HTML
