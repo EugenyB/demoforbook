@@ -33,9 +33,11 @@ editGroupDialog.addEventListener('show.bs.modal', function (event) {
         for (let i = 0; i < curatorList.options.length; i++) {
             curatorList.options[i].selected = (curatorList.options[i].value === curator_id);
         }
+        // document.getElementById("add_group_form").setAttribute('method', 'PATCH')
 
         confirmButton.setAttribute('value', 'Update');
     }  else {
+        // document.getElementById("add_group_form").setAttribute('method', 'PUT')
         document.getElementById("group_id").setAttribute('value', '0');
         document.getElementById("group_name").setAttribute('value', '');
         document.getElementById("group_majors").selectedIndex = 0;

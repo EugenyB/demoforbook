@@ -10,18 +10,19 @@ myAddCityDialog.addEventListener('show.bs.modal', function (event) {
     let approveButton = document.getElementById("approve_city");
     let nameEdit = document.getElementById("city_name");
     let idField = document.getElementById("city_id");
+    let mField = document.getElementById("mid");
 
     let dialogTitle = myAddCityDialog.querySelector('.modal-title');
     if (button.getAttribute('data-bs-ident') === '#add') {
         idField.value = '0';
         nameEdit.value = '';
-
+        mField.value = 'POST';
         approveButton.textContent = "Add City";
         dialogTitle.textContent = "Add City";
     } else {
         idField.value = button.getAttribute('data-bs-id');
         nameEdit.value = name;
-
+        mField.value = 'PUT';
         dialogTitle.textContent = "Edit City";
         approveButton.textContent = "Update City";
     }

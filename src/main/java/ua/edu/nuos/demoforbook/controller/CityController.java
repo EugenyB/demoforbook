@@ -24,7 +24,7 @@ public class CityController {
         return "redirect:/dirs";
     }
 
-    @PostMapping("/edit_city")
+    @PutMapping("/edit_city")
     public String editCity(@RequestParam("city_id") Integer id, @RequestParam("city_name") String name) {
         cityService.updateCity(id, name);
         return "redirect:/dirs";
